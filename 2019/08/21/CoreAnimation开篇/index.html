@@ -1,0 +1,129 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Patrick yangmx_patrick@foxmail.com"><title>动画开篇 · Patrick</title><meta name="description" content="先说下背景，平时开发中很少会遇到那种特别繁复的动画场景，当然也可能是产品经理觉得咱的产品炫酷不起来，基本的旋转缩放什么的就满足了日常的需求。但讲道理不够酷啊，加上刚好最近前同事有一个动画的需求，所以自己借着空闲尝试下。
+CoreAnimation这是系统提供的核心动画的API，但凡你需要的绚丽的动画"><meta name="keywords" content="Object-C,Swift,Flutter"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title><a href="/">Patrick</a></h3><div class="description"><p>记录生活，记录bug</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a href="https://www.caicai.me"> CaiCai </a><span>&</span><a href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">时间戳</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>动画开篇</a></h3></div><div class="post-content"><p>先说下背景，平时开发中很少会遇到那种特别繁复的动画场景，当然也可能是产品经理觉得咱的产品炫酷不起来，基本的旋转缩放什么的就满足了日常的需求。但讲道理不够酷啊，加上刚好最近前同事有一个动画的需求，所以自己借着空闲尝试下。</p>
+<h4 id="CoreAnimation"><a href="#CoreAnimation" class="headerlink" title="CoreAnimation"></a>CoreAnimation</h4><p>这是系统提供的核心动画的API，但凡你需要的绚丽的动画都可以用它实现，官网给了详细的介绍<a href="[https://developer.apple.com/documentation/quartzcore](https://developer.apple.com/documentation/quartzcore)">CoreAnimation</a></p>
+<p>作为初识，主要认识下其中我们经常用到的</p>
+<h5 id="1-CALayer"><a href="#1-CALayer" class="headerlink" title="1.CALayer"></a>1.CALayer</h5><p>这个我们经常会用，简单说就是负责绘制view的图层，撇开动画不谈，我们经常会用到旋转、圆角、阴影等都是靠它实现的。它是实现动画的基础，你想想你总不能整一堆view的组合、旋转、跳跃来实现动画吧，只需要在一个图层上绘制你想要的就好了</p>
+<ul>
+<li><p>position：属性是一个CGPoint值， 指定图层相当于它父图层的位置, 该值基于父图层的坐标系</p>
+</li>
+<li><p>bounds：属性是CGRect值， 指定图层的大小(bounds.size)和图层的 原点(bounds.origin)</p>
+</li>
+<li><p>anchorPoint:属性是CGPoint值，简单说叫锚点，之前看过一个例子挺契合，把一张A4纸钉在书桌上，白纸可以顺着图钉旋转，它就可以看做是锚点，在丰富的想纸做缩放平移什么的操作也是依据这个锚点，anchorPoint就是图钉在当前图层上的位置它的取值横向纵向均为0~1，分别对应着左上角到右下角。它跟position的分别应该就是一个定义了在父图层的位置，一个定义了变化所需要对应的点</p>
+</li>
+</ul>
+<h5 id="2-CATextLayer"><a href="#2-CATextLayer" class="headerlink" title="2.CATextLayer"></a>2.CATextLayer</h5><p>负责在图层上显示文字，文本可以是NSString 也可以是NSAttributedString，系统也提供了字体大小、颜色等属性，不深究</p>
+<h5 id="3-CAShapeLayer"><a href="#3-CAShapeLayer" class="headerlink" title="3.CAShapeLayer"></a>3.CAShapeLayer</h5><p>系统API的备注是绘制贝塞尔曲线，日常配合<code>UIBezierPath</code>使用</p>
+<p><strong>UIBezierPath</strong></p>
+<p>专业解释是基于它来创建矢量的路径，个人理解就是画笔的笔尖，移动画笔会留下线条这种，系统开放的API提供了很多画路径的方法，逐一看下</p>
+<p>初始化方法：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 根据一个Rect画一个矩形曲线</span></span><br><span class="line">+ (<span class="keyword">instancetype</span>)bezierPath;</span><br><span class="line"></span><br><span class="line"><span class="comment">//根据一个Rect画一个椭圆曲线  Rect为正方形时画的是一个圆</span></span><br><span class="line">+ (<span class="keyword">instancetype</span>)bezierPathWithRect:(<span class="built_in">CGRect</span>)rect;</span><br><span class="line"></span><br><span class="line"><span class="comment">//根据一个Rect画一个圆角矩形曲线 (Radius:圆角半径)   当Rect为正方形时且Radius等于边长一半时画的是一个圆</span></span><br><span class="line">+ (<span class="keyword">instancetype</span>)bezierPathWithOvalInRect:(<span class="built_in">CGRect</span>)rect;</span><br><span class="line"></span><br><span class="line"><span class="comment">//根据一个Rect画一个圆角矩形曲线  当Rect为正方形时且Radius等于边长一半时画的是一个圆</span></span><br><span class="line">+ (<span class="keyword">instancetype</span>)bezierPathWithRoundedRect:(<span class="built_in">CGRect</span>)rect cornerRadius:(<span class="built_in">CGFloat</span>)cornerRadius;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> 根据一个Rect针对四角中的某个或多个角设置圆角</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> @param rect CGRect一个矩形</span></span><br><span class="line"><span class="comment"> @param corners 允许指定矩形的部分角为圆角，而其余的角为直角，取值来自枚举</span></span><br><span class="line"><span class="comment"> @param cornerRadii 指定了圆角的半径，这个参数的取值是 CGSize 类型，也就意味着这里需要给出的是椭圆的半径。</span></span><br><span class="line"><span class="comment"> @return return value description</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">+ (<span class="keyword">instancetype</span>)bezierPathWithRoundedRect:(<span class="built_in">CGRect</span>)rect byRoundingCorners:(<span class="built_in">UIRectCorner</span>)corners cornerRadii:(<span class="built_in">CGSize</span>)cornerRadii;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> 以某个中心点画弧线</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> @param center 指定了圆弧所在正圆的圆心点坐标</span></span><br><span class="line"><span class="comment"> @param radius 指定了圆弧半径</span></span><br><span class="line"><span class="comment"> @param startAngle 开始弧度位置</span></span><br><span class="line"><span class="comment"> @param endAngle 结束弧度位置</span></span><br><span class="line"><span class="comment"> @param clockwise 绘制方向</span></span><br><span class="line"><span class="comment"> @return return value description</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">+ (<span class="keyword">instancetype</span>)bezierPathWithArcCenter:(<span class="built_in">CGPoint</span>)center radius:(<span class="built_in">CGFloat</span>)radius startAngle:(<span class="built_in">CGFloat</span>)startAngle endAngle:(<span class="built_in">CGFloat</span>)endAngle clockwise:(<span class="built_in">BOOL</span>)clockwise;</span><br><span class="line"></span><br><span class="line"><span class="comment">//根据CGPath创建并返回新的UIBezierPath</span></span><br><span class="line">+ (<span class="keyword">instancetype</span>)bezierPathWithCGPath:(<span class="built_in">CGPathRef</span>)<span class="built_in">CGPath</span>;</span><br></pre></td></tr></table></figure>
+
+<p>路径操作方法：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//移动点</span></span><br><span class="line">- (<span class="keyword">void</span>)moveToPoint:(<span class="built_in">CGPoint</span>)point;</span><br><span class="line"><span class="comment">//画一条直线</span></span><br><span class="line">- (<span class="keyword">void</span>)addLineToPoint:(<span class="built_in">CGPoint</span>)point;</span><br><span class="line"><span class="comment">//绘制三阶贝塞尔曲线。以endPoint为终点，以controlPoint1、controlPoint2两个点为控制点，绘制贝塞尔曲线。</span></span><br><span class="line">- (<span class="keyword">void</span>)addCurveToPoint:(<span class="built_in">CGPoint</span>)endPoint controlPoint1:(<span class="built_in">CGPoint</span>)controlPoint1 controlPoint2:(<span class="built_in">CGPoint</span>)controlPoint2;</span><br><span class="line"><span class="comment">//绘制二阶贝塞尔曲线。以endPoint为终点，以controlPoint为控制点，绘制二阶贝塞尔曲线。</span></span><br><span class="line">- (<span class="keyword">void</span>)addArcWithCenter:(<span class="built_in">CGPoint</span>)center radius:(<span class="built_in">CGFloat</span>)radius startAngle:(<span class="built_in">CGFloat</span>)startAngle endAngle:(<span class="built_in">CGFloat</span>)endAngle clockwise:(<span class="built_in">BOOL</span>)clockwise <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">4</span>_0);</span><br><span class="line"><span class="comment">//闭合路径</span></span><br><span class="line">- (<span class="keyword">void</span>)closePath;</span><br><span class="line"><span class="comment">//移除路径上所有点</span></span><br><span class="line">- (<span class="keyword">void</span>)removeAllPoints;</span><br><span class="line"><span class="comment">//原有路径上新增一个路径</span></span><br><span class="line">- (<span class="keyword">void</span>)appendPath:(<span class="built_in">UIBezierPath</span> *)bezierPath;</span><br><span class="line"><span class="comment">//创建一个X,Y逆转的新路径,我的理解就是将坐标系的xy对掉</span></span><br><span class="line">- (<span class="built_in">UIBezierPath</span> *)bezierPathByReversingPath <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">6</span>_0);</span><br><span class="line"><span class="comment">//使用指定的仿射变换矩阵转换路径中的所有点</span></span><br><span class="line">- (<span class="keyword">void</span>)applyTransform:(<span class="built_in">CGAffineTransform</span>)transform;</span><br></pre></td></tr></table></figure>
+
+<p>这就是<code>UIBezierPath</code>提供给我们的划线方式，下面我们就要琢磨着怎么将它和<code>CAShapeLayer</code>组合起来使用</p>
+<p>个人理解他们的关系是<code>UIBezierPath</code>负责绘制路径，<code>CAShapeLayer</code>在提供的路径中进行渲染，最后形成<code>Shape</code></p>
+<p>举几个例子看下</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">CAShapeLayer</span> *shapeLayer = [<span class="built_in">CAShapeLayer</span> layer];</span><br><span class="line">shapeLayer.fillColor = [<span class="built_in">UIColor</span> cyanColor].CGColor;</span><br><span class="line">shapeLayer.lineWidth = <span class="number">2</span>;</span><br><span class="line">shapeLayer.strokeColor = [<span class="built_in">UIColor</span> blueColor].CGColor;</span><br><span class="line"></span><br><span class="line"><span class="built_in">UIBezierPath</span> *path = [<span class="built_in">UIBezierPath</span> bezierPathWithOvalInRect:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">150</span>, <span class="number">150</span>)];</span><br><span class="line">shapeLayer.path = path.CGPath;</span><br><span class="line">[<span class="keyword">self</span>.layer addSublayer:shapeLayer];</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>UIBezierPath</code>绘制圆环，通过<code>CAShapeLayer</code>绘制渲染，实现圆的绘制</p>
+<p>当然他们的功能远远不止于此，需要我们慢慢摸索去开发，组合出我们想要的动画。</p>
+<h4 id="4-CAAnimation"><a href="#4-CAAnimation" class="headerlink" title="4.CAAnimation"></a>4.CAAnimation</h4><p>它应该算上核心动画的核心了，因为我们之前说了绘制渲染什么的都是静态的，怎么让它们动起来才是动画的核心，那怎么动起来呢 利用<code>CAAnimation</code>就可以了吗？</p>
+<p>这么说其实不够严谨，因为官方对他的解释是他只是一个抽象类，动画是用它的子类实现。看下具体</p>
+<h5 id="CABasicAnimation"><a href="#CABasicAnimation" class="headerlink" title="CABasicAnimation"></a>CABasicAnimation</h5><p>官方解释，通过键值对访问修改响应属性的基础动画对象，它的使用很简单，但是有个一个不是很友好的地方，键值对需要你自己知道当前需要改变的属性对应的key，还好已经有人整理出来了。我们可以参考下最常用的一些</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>说明</th>
+<th>使用形式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>transform.scale</td>
+<td>比例转化</td>
+<td>@(0.8)</td>
+</tr>
+<tr>
+<td>transform.scale.x</td>
+<td>宽的比例</td>
+<td>@(0.8)</td>
+</tr>
+<tr>
+<td>transform.scale.y</td>
+<td>高的比例</td>
+<td>@(0.8)</td>
+</tr>
+<tr>
+<td>transform.rotation.x</td>
+<td>围绕x轴旋转</td>
+<td>@(M_PI)</td>
+</tr>
+<tr>
+<td>transform.rotation.y</td>
+<td>围绕y轴旋转</td>
+<td>@(M_PI)</td>
+</tr>
+<tr>
+<td>transform.rotation.z</td>
+<td>围绕z轴旋转</td>
+<td>@(M_PI)</td>
+</tr>
+<tr>
+<td>cornerRadius</td>
+<td>圆角的设置</td>
+<td>@(50)</td>
+</tr>
+<tr>
+<td>backgroundColor</td>
+<td>背景颜色的变化</td>
+<td>(id)[UIColor purpleColor].CGColor</td>
+</tr>
+<tr>
+<td>bounds</td>
+<td>大小，中心不变</td>
+<td>[NSValue valueWithCGRect:CGRectMake(0, 0, 200, 200)];</td>
+</tr>
+<tr>
+<td>position</td>
+<td>位置(中心点的改变)</td>
+<td>[NSValue valueWithCGPoint:CGPointMake(300, 300)];</td>
+</tr>
+<tr>
+<td>contents</td>
+<td>内容，比如UIImageView的图片</td>
+<td>imageAnima.toValue = (id)[UIImage imageNamed:@”to”].CGImage;</td>
+</tr>
+<tr>
+<td>opacity</td>
+<td>透明度</td>
+<td>@(0.7)</td>
+</tr>
+<tr>
+<td>contentsRect.size.width</td>
+<td>横向拉伸缩放</td>
+<td>@(0.4)最好是0~1之间的</td>
+</tr>
+</tbody></table>
+<p>看下基础用因为有有个改变透明度的需求，所以用它做列子</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">CABasicAnimation</span> *animation = [<span class="built_in">CABasicAnimation</span> animationWithKeyPath:<span class="string">@"opacity"</span>];</span><br><span class="line">animation.duration = <span class="number">0.2</span>;</span><br><span class="line">animation.fromValue = @(<span class="number">0</span>);</span><br><span class="line">animation.toValue = @(<span class="number">1</span>);</span><br><span class="line">animation.beginTime = <span class="built_in">CACurrentMediaTime</span>();</span><br><span class="line">[layer addAnimation:animation forKey:<span class="string">@"opacityAnimation"</span>];</span><br></pre></td></tr></table></figure>
+
+<p>具体参数包括</p>
+<p><strong>duration</strong>  动画时常</p>
+<p><strong>repeatCount</strong>  动画重复次数 不停重复设置为 HUGE_VALF</p>
+<p><strong>repeatDuration</strong>  动画重复的间隔时常</p>
+<p><strong>beginTime</strong>  动画开始时间 通过<code>CACurrentMediaTime()</code>设置</p>
+<p><strong>timingFunction</strong>  动画的速度变化</p>
+<p><strong>autoreverses</strong>  动画结束后是否逆向</p>
+<p><strong>fromValue</strong>  动画起始值 id类型</p>
+<p><strong>toValue</strong>   动画结束值 id类型</p>
+<p><strong>byValue</strong>   所改变属性相同起始值的改变量</p>
+<p><strong>speed</strong>  动画的执行速度，即多少秒执行完一个动画</p>
+<p>有一点需要注明，动画默认完成后会回到初始的状态所以如果要保证动画保持完成后的状态需要设置两个参数</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">animation.removedOnCompletion = <span class="literal">NO</span>;</span><br><span class="line">animation.fillMode = kCAFillModeForwards;</span><br></pre></td></tr></table></figure>
+
+<p><code>CABasicAnimation</code>还有动画相关的代理方法可以实现，例如我们需要在动画开始前和结束时执行某一个指令就可以通过设置代理方法实现</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//动画开始时</span></span><br><span class="line">- (<span class="keyword">void</span>)animationDidStart:(<span class="built_in">CAAnimation</span> *)anim</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"开始了"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//动画结束时</span></span><br><span class="line">- (<span class="keyword">void</span>)animationDidStop:(<span class="built_in">CAAnimation</span> *)anim finished:(<span class="built_in">BOOL</span>)flag</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//方法中的flag参数表明了动画是自然结束还是被打断,比如调用了removeAnimationForKey:方法或removeAnimationForKey方法，flag为NO，如果是正常结束，flag为YES。</span></span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"结束了"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>至此我们就可以使用基本的核心动画了，至于之后遇到更繁杂的动画需求，就需要做这方面的专门的进阶篇了。</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-08-21</span><i class="fa fa-tag"></i></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,http://yoursite.com/2019/08/21/CoreAnimation开篇/,Patrick,动画开篇,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2019/08/30/动画番外篇/" title="动画番外篇">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2019/08/08/这是一篇多线程/" title="这是一篇多线程">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

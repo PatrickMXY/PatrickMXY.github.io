@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Patrick yangmx_patrick@foxmail.com"><title>这是一篇GitHub的使用理解 · Patrick</title><meta name="description" content="日常使用SVN管理代码，并且通过Cornerstone管理，可以说是傻瓜式操作，但是GitHub作为最大的基佬交流网，怎么可以不加入其中呢
+1.注册GitHub账号这一步很重要，毕竟巧妇难为无米之炊
+2.新建仓库在自己的GitHub账号下新建仓库，选择  ** New Repositories** "><meta name="keywords" content="Object-C,Swift,Flutter"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title><a href="/">Patrick</a></h3><div class="description"><p>记录生活，记录bug</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a href="https://www.caicai.me"> CaiCai </a><span>&</span><a href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">时间戳</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>这是一篇GitHub的使用理解</a></h3></div><div class="post-content"><p>日常使用SVN管理代码，并且通过Cornerstone管理，可以说是傻瓜式操作，但是GitHub作为最大的基佬交流网，怎么可以不加入其中呢</p>
+<h3 id="1-注册GitHub账号"><a href="#1-注册GitHub账号" class="headerlink" title="1.注册GitHub账号"></a>1.注册GitHub账号</h3><p>这一步很重要，毕竟巧妇难为无米之炊</p>
+<h3 id="2-新建仓库"><a href="#2-新建仓库" class="headerlink" title="2.新建仓库"></a>2.新建仓库</h3><p>在自己的GitHub账号下新建仓库，选择  ** New Repositories** </p>
+<p><img src="/image/codeManager1.png" alt></p>
+<p>这里有一个许可证类型可能会让人懵逼，我们可以借助一张图来理解下</p>
+<p><img src="/image/codeManager6.png" alt></p>
+<p>想了解更多的可以参考阮一峰的博文<a href="[http://www.ruanyifeng.com/blog/2011/05/how_to_choose_free_software_licenses.html](http://www.ruanyifeng.com/blog/2011/05/how_to_choose_free_software_licenses.html">开源许可证</a></p>
+<h3 id="3-添加SSHKey"><a href="#3-添加SSHKey" class="headerlink" title="3.添加SSHKey"></a>3.添加SSHKey</h3><p>SSHKey是什么的，顾名思义就是SSH的key，那SSH又是什么呢，讲道理我也不明白，可以理解成一种为了网络安全传输的网络协议，用于计算机之间的加密登录，感兴趣原理的话可以参考。<a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html" target="_blank" rel="noopener">SSH的原理</a></p>
+<p>添加流程：</p>
+<p>.打开终端 执行’ <em>ssh-keygen -t rsa -b 4096 -C</em> 你的邮箱 ‘,注意要填写自己的真是邮箱，这里我填的是GitHub的账号邮箱。（运行过程中有停顿，可以按空格带过，这样会在根目录下生成.ssh文件夹）</p>
+<p><img src="/image/codeManager2.png" alt></p>
+<p>.cd 到根目录下，执行’<em>cat ~/.ssh/id_rsa.pub</em>‘ 会得到一串东西，完整的复制下来，稍后会用到。</p>
+<p><img src="/image/codeManager3.png" alt></p>
+<p>.回到GitHub 的账号信息的Setting 会有一个新建SSHKey ,将刚才生成的一串内容复制到key里，title任意填写名称区分。至此我们生成SSHKey的任务是完成了，紧接着讲本机和GitHub绑定起来。（反正是让他们之间的安全通讯的桥梁建立起来，表述可能不严谨）</p>
+<p>.终端输入’ssh -T <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>‘ ，中途有提示你是否继续选择yes，成功后会有一段’You’ve successfully authenticated, but GitHub does not provide shell access’,至此表明你成功了。添加SSHKey流程结束</p>
+<p>Tips：</p>
+<pre><code>1.每台电脑只需要一个SSHKey，他可以访问你的所有仓库
+
+2.每个GitHub账号下可以生成多个SSHKey，例如你有多台设备，都想访问你的仓库内容
+
+3.若SSHKey被删除了，重新生成一个替换之前就好</code></pre><h3 id="4-提交"><a href="#4-提交" class="headerlink" title="4.提交"></a>4.提交</h3><p>终于来到我们的初衷了，在这之前我们需要先配置下我们的GitHub账户信息到本地</p>
+<p>终端执行’git config–globaluser.name your name’（表明提交代码的用户名）</p>
+<p>‘git config–globaluser.email <a href="mailto:your_email@youremail.com" target="_blank" rel="noopener">your_email@youremail.com</a>‘(这里我填写的是GitHub账号的邮箱)</p>
+<p>代码提交流程：</p>
+<p>.首先我们第二步生成的仓库里clone下我们的地址，cd到项目管理路径下，执行’git clone your github repositories 地址’ </p>
+<p><img src="/image/codeManager4.png" alt="地址看这里"></p>
+<p>.成功执行后我们就clone该仓库到了本地文件夹，我们尝试在文件夹里做一些变更然后执行’git add .’将改动的地方添加的版本管理器</p>
+<p>.执行’git commit -m your log’ 提交到本地的版本控制库</p>
+<p>.执行’git push -u origin master’ 至此我们就可以成功的将变更内容提交到GitHub了，我们可以到我们的仓库下面查看更新内容</p>
+<p><img src="/image/codeManager5.png" alt></p>
+<p>多人维护的时候我们需要先’git pull’更新下，类似SVN需要先update 在 commit一样，避免代码冲突带来的麻烦</p>
+<h3 id="5-小结"><a href="#5-小结" class="headerlink" title="5.小结"></a>5.小结</h3><p>GitHub管理相较SVN好像已经变成了大趋势，毕竟相较SVN我们用终端处理这些的时候显得逼格更胜一筹，当然也可以借助客户端，但是之前最好先用好终端命令，让我们知道它的一个流程的。</p>
+<p>## </p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-07-24</span><i class="fa fa-tag"></i></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,http://yoursite.com/2019/07/24/GitHub托管代码/,Patrick,这是一篇GitHub的使用理解,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2019/07/24/开发中用到的线程锁/" title="这是一篇线程锁的理解">上一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
